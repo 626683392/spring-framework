@@ -9,4 +9,11 @@ public class MyBeanDemo {
     public void setBeanName(String beanName) {
         this.beanName = beanName;
     }
+
+	@Override
+	public String toString() {
+		return "MyBeanDemo{" +
+				"beanName='" + beanName + '\'' +
+				'}';
+	}
 }
