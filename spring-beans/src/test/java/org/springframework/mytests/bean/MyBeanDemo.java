@@ -1,4 +1,4 @@
-package org.springframework.mytests;
+package org.springframework.mytests.bean;
 
 public class MyBeanDemo {
     private String beanName = "bean";

@@ -1,17 +1,16 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <beans xmlns="http://www.springframework.org/schema/beans"
 	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	   xsi:schemaLocation="
-        http://www.springframework.org/schema/beans
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-	<bean id="demo" class="org.springframework.mytests.MyBeanDemo">
+	<bean id="demo" class="org.springframework.mytests.bean.MyBeanDemo">
 		<property name="beanName" value="bean demo1"/>
 <!--		<meta key="beanName" value="bean demo1"/>-->
 	</bean>
 
 
-	<bean id="helloBean" class="org.springframework.mytests.HelloBean">
+	<bean id="helloBean" class="org.springframework.mytests.bean.HelloBean">
 		<constructor-arg index="0">
 			<value>张飞</value>
 		</constructor-arg>
