@@ -164,6 +164,10 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 
 	/**
 	 * Create a new AbstractAutowireCapableBeanFactory.
+	 * 	ignoreDependencyInterface 忽略给定接口的自动装配功能
+	 * 		比较常见的使用案例就是ApplicationContext通过ApplicationContextAware注入
+	 * 			在其他bean注入ApplicationContext时，不会先实例化ApplicationContext
+	 *
 	 */
 	public AbstractAutowireCapableBeanFactory() {
 		super();

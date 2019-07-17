@@ -84,9 +84,11 @@ public class DelegatingEntityResolver implements EntityResolver {
 
 		if (systemId != null) {
 			if (systemId.endsWith(DTD_SUFFIX)) {
+				// 如果是DTD 从systemId截取最后的xxx.dtd路劲下查找
 				return this.dtdResolver.resolveEntity(publicId, systemId);
 			}
 			else if (systemId.endsWith(XSD_SUFFIX)) {
+				// 如果是XSD 那么默认是到"META-INF/spring.schemas"文件中找到systemId对应的XSD下载
 				return this.schemaResolver.resolveEntity(publicId, systemId);
 			}
 		}
