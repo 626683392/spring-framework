@@ -259,6 +259,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 					logger.debug("Returning cached instance of singleton bean '" + beanName + "'");
 				}
 			}
+			// 这里主要处理objectFactory的bean加载
 			bean = getObjectForBeanInstance(sharedInstance, name, beanName, null);
 		}
 
@@ -321,6 +322,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 				if (mbd.isSingleton()) {
 					sharedInstance = getSingleton(beanName, () -> {
 						try {
+							// 调用createBean实例化bean
 							return createBean(beanName, mbd, args);
 						}
 						catch (BeansException ex) {
@@ -1628,7 +1630,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 	 */
 	protected Object getObjectForBeanInstance(
 			Object beanInstance, String name, String beanName, @Nullable RootBeanDefinition mbd) {
-
+		// 如果name的类型是&开头的 而bean又不是 FactoryBean则验证不通过
 		// Don't let calling code try to dereference the factory if the bean isn't a factory.
 		if (BeanFactoryUtils.isFactoryDereference(name)) {
 			if (beanInstance instanceof NullBean) {
@@ -1642,22 +1644,29 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 		// Now we have the bean instance, which may be a normal bean or a FactoryBean.
 		// If it's a FactoryBean, we use it to create a bean instance, unless the
 		// caller actually wants a reference to the factory.
+		// 如果不是FactoryBean实例则直接返回 如果是用户想获取beanFactory实例应该在前面加&
 		if (!(beanInstance instanceof FactoryBean) || BeanFactoryUtils.isFactoryDereference(name)) {
 			return beanInstance;
 		}
 
 		Object object = null;
 		if (mbd == null) {
+			// 尝试从缓存中获取bean的信息
 			object = getCachedObjectForFactoryBean(beanName);
 		}
 		if (object == null) {
+			// 这里已经确定是FactoryBean类型
 			// Return bean instance from factory.
 			FactoryBean<?> factory = (FactoryBean<?>) beanInstance;
 			// Caches object obtained from FactoryBean if it is a singleton.
+			// 根据bean定义检测beanDefinitionMap是否包含bean的定义
 			if (mbd == null && containsBeanDefinition(beanName)) {
+				// 如果指定的beanName是子bean 则需要合并父bean信息
 				mbd = getMergedLocalBeanDefinition(beanName);
 			}
+			// synthetic 是否是用户自定义的
 			boolean synthetic = (mbd != null && mbd.isSynthetic());
+			// 解析bean的操作委任给getObjectFromFactoryBean
 			object = getObjectFromFactoryBean(factory, beanName, !synthetic);
 		}
 		return object;
@@ -1729,23 +1738,6 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 	//---------------------------------------------------------------------
 
 	/**
-	 * Check if this bean factory contains a bean definition with the given name.
-	 * Does not consider any hierarchy this factory may participate in.
-	 * Invoked by {@code containsBean} when no cached singleton instance is found.
-	 * <p>Depending on the nature of the concrete bean factory implementation,
-	 * this operation might be expensive (for example, because of directory lookups
-	 * in external registries). However, for listable bean factories, this usually
-	 * just amounts to a local hash lookup: The operation is therefore part of the
-	 * public interface there. The same implementation can serve for both this
-	 * template method and the public interface method in that case.
-	 * @param beanName the name of the bean to look for
-	 * @return if this bean factory contains a bean definition with the given name
-	 * @see #containsBean
-	 * @see org.springframework.beans.factory.ListableBeanFactory#containsBeanDefinition
-	 */
-	protected abstract boolean containsBeanDefinition(String beanName);
-
-	/**
 	 * Return the bean definition for the given bean name.
 	 * Subclasses should normally implement caching, as this method is invoked
 	 * by this class every time bean definition metadata is needed.
@@ -1765,6 +1757,23 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 	 * @see org.springframework.beans.factory.config.ConfigurableListableBeanFactory#getBeanDefinition
 	 */
 	protected abstract BeanDefinition getBeanDefinition(String beanName) throws BeansException;
+
+	/**
+	 * Check if this bean factory contains a bean definition with the given name.
+	 * Does not consider any hierarchy this factory may participate in.
+	 * Invoked by {@code containsBean} when no cached singleton instance is found.
+	 * <p>Depending on the nature of the concrete bean factory implementation,
+	 * this operation might be expensive (for example, because of directory lookups
+	 * in external registries). However, for listable bean factories, this usually
+	 * just amounts to a local hash lookup: The operation is therefore part of the
+	 * public interface there. The same implementation can serve for both this
+	 * template method and the public interface method in that case.
+	 * @param beanName the name of the bean to look for
+	 * @return if this bean factory contains a bean definition with the given name
+	 * @see #containsBean
+	 * @see org.springframework.beans.factory.ListableBeanFactory#containsBeanDefinition
+	 */
+	protected abstract boolean containsBeanDefinition(String beanName);
 
 	/**
 	 * Create a bean instance for the given merged bean definition (and arguments).
