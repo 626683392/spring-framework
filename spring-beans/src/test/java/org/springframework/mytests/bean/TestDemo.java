@@ -13,7 +13,6 @@ public class TestDemo {
             MyBeanDemo bean = (MyBeanDemo)factory.getBean("demo");
             System.out.println(bean.getBeanName());
 
-
 			HelloBean helloBean = (HelloBean)factory.getBean("helloBean");
 			System.out.println(helloBean);
         } catch (BeansException e) {

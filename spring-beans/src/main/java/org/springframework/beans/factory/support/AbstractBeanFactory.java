@@ -238,10 +238,15 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 	@SuppressWarnings("unchecked")
 	protected <T> T doGetBean(final String name, @Nullable final Class<T> requiredType,
 			@Nullable final Object[] args, boolean typeCheckOnly) throws BeansException {
-
+		// 转换别名 主要是将别名区分 拿到实际的beanName
 		final String beanName = transformedBeanName(name);
 		Object bean;
-
+		/**
+		 * 尝试在缓存获取或者实例工厂中的ObjectFactory获取
+		 *  因为spring在创建单例时会存在依赖注入的情况，而在创建依赖的时候为了避免循环依赖，
+		 *  spring创建bean的时候会不等bean实例化完成先把创建bean的objectFactory提前加入缓存中，
+		 *  一旦下一个bean需要依赖上一个bean时，直接使用objectfactory
+		 */
 		// Eagerly check singleton cache for manually registered singletons.
 		Object sharedInstance = getSingleton(beanName);
 		if (sharedInstance != null && args == null) {
@@ -291,9 +296,11 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 				final RootBeanDefinition mbd = getMergedLocalBeanDefinition(beanName);
 				checkMergedBeanDefinition(mbd, beanName, args);
 
+				// 检查依赖
 				// Guarantee initialization of beans that the current bean depends on.
 				String[] dependsOn = mbd.getDependsOn();
 				if (dependsOn != null) {
+					// 如果存在依赖需要先递归实例化依赖
 					for (String dep : dependsOn) {
 						if (isDependent(beanName, dep)) {
 							throw new BeanCreationException(mbd.getResourceDescription(), beanName,
