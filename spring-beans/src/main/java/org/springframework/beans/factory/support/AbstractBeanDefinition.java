@@ -140,65 +140,115 @@ public abstract class AbstractBeanDefinition extends BeanMetadataAttributeAccess
 	@Nullable
 	private volatile Object beanClass;
 
+	/**
+	 * bean的作用范围
+	 */
 	@Nullable
 	private String scope = SCOPE_DEFAULT;
-
+	/**
+	 * 是否抽象
+	 */
 	private boolean abstractFlag = false;
-
+	/**
+	 * 是否懒加载
+	 */
 	private boolean lazyInit = false;
-
+	/**
+	 * 自动注入模式
+	 */
 	private int autowireMode = AUTOWIRE_NO;
-
+	/**
+	 * 依赖检查 spring3.x后弃用
+	 */
 	private int dependencyCheck = DEPENDENCY_CHECK_NONE;
-
+	/**
+	 * 用来表示一个bean的实例化依靠另一个bean先实例化
+	 */
 	@Nullable
 	private String[] dependsOn;
-
+	/**
+	 * autowireCandidate为true表示spring在寻找自动装配时不考虑该bean
+	 * 但是该bean仍然可以注入其他bean
+	 */
 	private boolean autowireCandidate = true;
-
+	/**
+	 * 自动装配时首选bean
+	 */
 	private boolean primary = false;
-
+	/**
+	 * 用于记录qualifier的元素信息
+	 */
 	private final Map<String, AutowireCandidateQualifier> qualifiers = new LinkedHashMap<>();
 
 	@Nullable
 	private Supplier<?> instanceSupplier;
-
+	/**
+	 * 允许访问非公开的构造器和方法
+	 */
 	private boolean nonPublicAccessAllowed = true;
-
+	/**
+	 * 是否以宽松的方式解析构造函数
+	 */
 	private boolean lenientConstructorResolution = true;
-
+	/**
+	 * 对应的factoryBean
+	 */
 	@Nullable
 	private String factoryBeanName;
-
+	/**
+	 * 对应bean的factoryMethod
+	 */
 	@Nullable
 	private String factoryMethodName;
-
+	/**
+	 * 构造函数的注入属性
+	 */
 	@Nullable
 	private ConstructorArgumentValues constructorArgumentValues;
-
+	/**
+	 * 普通属性集合
+	 */
 	@Nullable
 	private MutablePropertyValues propertyValues;
-
+	/**
+	 * 方法重写的持有者 记录lookup-method、replaced-method
+	 */
 	@Nullable
 	private MethodOverrides methodOverrides;
-
+	/**
+	 * 初始化方法 对应init-Method
+	 */
 	@Nullable
 	private String initMethodName;
-
+	/**
+	 * 销毁方法 对应destroy-Method
+	 */
 	@Nullable
 	private String destroyMethodName;
-
+	/**
+	 * 是否执行InitMetho方法
+	 */
 	private boolean enforceInitMethod = true;
-
+	/**
+	 * 是否执行DestroyMethod方法
+	 */
 	private boolean enforceDestroyMethod = true;
-
+	/**
+	 * 是否是用户自定义的，创建aop的时候为true
+	 */
 	private boolean synthetic = false;
-
+	/**
+	 * 定义这个bean的使用APPLICATION用户 ，ROLE_INFRASTRUCTURE内部使用 ，ROLE_APPLICATION某些配置
+	 */
 	private int role = BeanDefinition.ROLE_APPLICATION;
-
+	/**
+	 * bean的描述信息
+	 */
 	@Nullable
 	private String description;
-
+	/**
+	 * 这个bean的定义资源
+	 */
 	@Nullable
 	private Resource resource;
 
