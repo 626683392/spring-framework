@@ -105,6 +105,7 @@ class BeanDefinitionValueResolver {
 	public Object resolveValueIfNecessary(Object argName, @Nullable Object value) {
 		// We must check each value to see whether it requires a runtime reference
 		// to another bean to be resolved.
+		// 对引用类型的属性进行解析
 		if (value instanceof RuntimeBeanReference) {
 			RuntimeBeanReference ref = (RuntimeBeanReference) value;
 			return resolveReference(argName, ref);
@@ -286,10 +287,13 @@ class BeanDefinitionValueResolver {
 	 */
 	@Nullable
 	private Object resolveReference(Object argName, RuntimeBeanReference ref) {
+		// 解析引用类型的属性值
 		try {
+			// 获取引用的Bean名称
 			Object bean;
 			String refName = ref.getBeanName();
 			refName = String.valueOf(doEvaluate(refName));
+			// 如果引用的对象在父类容器中，则从父类容器中获取指定的引用对象
 			if (ref.isToParent()) {
 				if (this.beanFactory.getParentBeanFactory() == null) {
 					throw new BeanCreationException(
@@ -300,7 +304,10 @@ class BeanDefinitionValueResolver {
 				bean = this.beanFactory.getParentBeanFactory().getBean(refName);
 			}
 			else {
+				// 从当前的容器中获取指定的引用Bean对象，如果指定的Bean没有被实例化
+				// 递归调用getBean
 				bean = this.beanFactory.getBean(refName);
+				// 将当前实例化对象的依赖引用对象
 				this.beanFactory.registerDependentBean(refName, this.beanName);
 			}
 			if (bean instanceof NullBean) {

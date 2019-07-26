@@ -10,11 +10,12 @@ public class TestDemo {
         BeanFactory factory = new XmlBeanFactory(new ClassPathResource("spring-bean.xml"));
 
         try {
-            MyBeanDemo bean = (MyBeanDemo)factory.getBean("demo");
-            System.out.println(bean.getBeanName());
-
 			HelloBean helloBean = (HelloBean)factory.getBean("helloBean");
 			System.out.println(helloBean);
+
+
+			MyBeanDemo bean = (MyBeanDemo)factory.getBean("demo");
+			System.out.println(bean);
         } catch (BeansException e) {
             e.printStackTrace();
         }

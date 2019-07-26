@@ -2793,8 +2793,8 @@ public class AutowiredAnnotationBeanPostProcessorTests {
 
 	@Target({ElementType.METHOD, ElementType.FIELD})
 	@Retention(RetentionPolicy.RUNTIME)
-	public @interface MyAutowired {
 
+	public @interface MyAutowired {
 		boolean optional() default false;
 	}
 

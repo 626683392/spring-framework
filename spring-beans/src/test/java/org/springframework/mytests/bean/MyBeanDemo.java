@@ -3,7 +3,17 @@ package org.springframework.mytests.bean;
 public class MyBeanDemo {
     private String beanName = "bean";
 
-    public String getBeanName() {
+    private HelloBean helloBean;
+
+	public HelloBean getHelloBean() {
+		return helloBean;
+	}
+
+	public void setHelloBean(HelloBean helloBean) {
+		this.helloBean = helloBean;
+	}
+
+	public String getBeanName() {
         return beanName;
     }
     public void setBeanName(String beanName) {
@@ -14,6 +24,7 @@ public class MyBeanDemo {
 	public String toString() {
 		return "MyBeanDemo{" +
 				"beanName='" + beanName + '\'' +
+				", helloBean=" + helloBean.getName() +
 				'}';
 	}
 }
