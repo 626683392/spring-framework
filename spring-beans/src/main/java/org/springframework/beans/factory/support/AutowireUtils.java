@@ -122,7 +122,9 @@ abstract class AutowireUtils {
 		if (setter != null) {
 			Class<?> targetClass = setter.getDeclaringClass();
 			for (Class<?> ifc : interfaces) {
+				// isAssignableFrom()方法是从类继承的角度去判断，instanceof关键字是从实例继承的角度去判断。 父类.class.isAssignableFrom(子类.class)
 				if (ifc.isAssignableFrom(targetClass) &&
+						// 是否含有set方法
 						ClassUtils.hasMethod(ifc, setter.getName(), setter.getParameterTypes())) {
 					return true;
 				}
