@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+
+	<bean id="datePropertyEditor" class="test.mytest.DatePropertyEditor">
+		<property name="format" value="yyyy-MM-dd"/>
+	</bean>
+
+<!--	<bean class="org.springframework.beans.factory.config.CustomEditorConfigurer">-->
+<!--		<property name="customEditors">-->
+<!--			<map>-->
+<!--				<entry key="java.util.Date">-->
+<!--					<value>test.mytest.DatePropertyEditor</value>-->
+<!--				</entry>-->
+<!--			</map>-->
+<!--		</property>-->
+<!--	</bean>-->
+
+	<bean id="demo" class="test.mytest.MyBeanDemo">
+		<property name="beanName" value="bean demo1"/>
+
+		<property name="dateValue" value="2019-03-15"/>
+	</bean>
+
+	<bean class="org.springframework.beans.factory.config.CustomEditorConfigurer">
+		<property name="propertyEditorRegistrars">
+			<list>
+				<bean class="test.mytest.DatePropertyEditorRegistrar"/>
+			</list>
+		</property>
+	</bean>
+
+
+
+
+</beans>

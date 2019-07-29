@@ -82,6 +82,19 @@ public class ResourceEditorRegistrar implements PropertyEditorRegistrar {
 
 
 	/**
+	 * Override default editor, if possible (since that's what we really mean to do here);
+	 * otherwise register as a custom editor.
+	 */
+	private void doRegisterEditor(PropertyEditorRegistry registry, Class<?> requiredType, PropertyEditor editor) {
+		if (registry instanceof PropertyEditorRegistrySupport) {
+			((PropertyEditorRegistrySupport) registry).overrideDefaultEditor(requiredType, editor);
+		}
+		else {
+			registry.registerCustomEditor(requiredType, editor);
+		}
+	}
+
+	/**
 	 * Populate the given {@code registry} with the following resource editors:
 	 * ResourceEditor, InputStreamEditor, InputSourceEditor, FileEditor, URLEditor,
 	 * URIEditor, ClassEditor, ClassArrayEditor.
@@ -115,21 +128,9 @@ public class ResourceEditorRegistrar implements PropertyEditorRegistrar {
 		doRegisterEditor(registry, Class[].class, new ClassArrayEditor(classLoader));
 
 		if (this.resourceLoader instanceof ResourcePatternResolver) {
+			// 注册与class类型对应的属性解析器
 			doRegisterEditor(registry, Resource[].class,
 					new ResourceArrayPropertyEditor((ResourcePatternResolver) this.resourceLoader, this.propertyResolver));
-		}
-	}
-
-	/**
-	 * Override default editor, if possible (since that's what we really mean to do here);
-	 * otherwise register as a custom editor.
-	 */
-	private void doRegisterEditor(PropertyEditorRegistry registry, Class<?> requiredType, PropertyEditor editor) {
-		if (registry instanceof PropertyEditorRegistrySupport) {
-			((PropertyEditorRegistrySupport) registry).overrideDefaultEditor(requiredType, editor);
-		}
-		else {
-			registry.registerCustomEditor(requiredType, editor);
 		}
 	}
 

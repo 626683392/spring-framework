@@ -113,6 +113,7 @@ class BeanDefinitionValueResolver {
 		// 对属性值是引用容器中另一个Bean名称的解析
 		else if (value instanceof RuntimeBeanNameReference) {
 			String refName = ((RuntimeBeanNameReference) value).getBeanName();
+			// doEvaluate解析SpEL表达式
 			refName = String.valueOf(doEvaluate(refName));
 			// 从容器中获取指定名称的Bean
 			if (!this.beanFactory.containsBean(refName)) {
