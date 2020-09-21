@@ -1,4 +1,4 @@
-package com.thoughtworks.iocbeanlifecicle;
+package com.meetkiki.iocbeanlifecicle;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Configuration;
 
 
 @Configuration
-@ComponentScan(basePackages = {"com.thoughtworks.iocbeanlifecicle"})
+@ComponentScan(basePackages = {"com.meetkiki.iocbeanlifecicle"})
 public class MainConfig {
 
 	@Bean(initMethod = "initPerson")

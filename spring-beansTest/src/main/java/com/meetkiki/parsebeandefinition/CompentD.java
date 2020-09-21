@@ -1,4 +1,4 @@
-package com.thoughtworks.parsebeandefinition;
+package com.meetkiki.parsebeandefinition;
 
 
 public class CompentD {

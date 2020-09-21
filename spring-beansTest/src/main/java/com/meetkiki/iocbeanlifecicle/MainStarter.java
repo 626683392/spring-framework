@@ -1,4 +1,4 @@
-package com.thoughtworks.iocbeanlifecicle;
+package com.meetkiki.iocbeanlifecicle;
 
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 

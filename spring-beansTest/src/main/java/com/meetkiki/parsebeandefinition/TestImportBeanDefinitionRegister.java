@@ -1,4 +1,4 @@
-package com.thoughtworks.parsebeandefinition;
+package com.meetkiki.parsebeandefinition;
 
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.RootBeanDefinition;

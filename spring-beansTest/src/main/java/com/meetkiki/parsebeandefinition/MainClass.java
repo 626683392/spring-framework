@@ -1,4 +1,4 @@
-package com.thoughtworks.parsebeandefinition;
+package com.meetkiki.parsebeandefinition;
 
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 

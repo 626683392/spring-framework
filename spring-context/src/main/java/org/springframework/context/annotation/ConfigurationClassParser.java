@@ -161,11 +161,15 @@ class ConfigurationClassParser {
 
 
 	public void parse(Set<BeanDefinitionHolder> configCandidates) {
+		/**
+		 * 用于来保存延时的ImportSelectors，最最最著名的代表就是SpringBoot自动装配的的类 AutoConfigurationImportSelector
+		 */
 		this.deferredImportSelectors = new LinkedList<>();
 
 		for (BeanDefinitionHolder holder : configCandidates) {
 			BeanDefinition bd = holder.getBeanDefinition();
 			try {
+				//真正的解析我们的bean定义
 				if (bd instanceof AnnotatedBeanDefinition) {
 					parse(((AnnotatedBeanDefinition) bd).getMetadata(), holder.getBeanName());
 				}
@@ -185,6 +189,7 @@ class ConfigurationClassParser {
 			}
 		}
 
+		//处理我们延时的DeferredImportSelectors w我们springboot就是通过这步进行记载spring.factories文件中的自定装配的对象
 		processDeferredImportSelectors();
 	}
 
@@ -199,6 +204,9 @@ class ConfigurationClassParser {
 	}
 
 	protected final void parse(AnnotationMetadata metadata, String beanName) throws IOException {
+		/**
+		 * 第一步:把我们的配置类源信息和beanName包装成一个ConfigurationClass 对象
+		 */
 		processConfigurationClass(new ConfigurationClass(metadata, beanName));
 	}
 
@@ -226,6 +234,7 @@ class ConfigurationClassParser {
 		if (existingClass != null) {
 			if (configClass.isImported()) {
 				if (existingClass.isImported()) {
+					// merge import
 					existingClass.mergeImportedBy(configClass);
 				}
 				// Otherwise ignore new imported config class; existing non-imported class overrides it.
@@ -241,6 +250,7 @@ class ConfigurationClassParser {
 
 		// Recursively process the configuration class and its superclass hierarchy.
 		SourceClass sourceClass = asSourceClass(configClass);
+		//真正的进行配置类的解析
 		do {
 			sourceClass = doProcessConfigurationClass(configClass, sourceClass);
 		}
@@ -264,6 +274,7 @@ class ConfigurationClassParser {
 		// Recursively process any member (nested) classes first
 		processMemberClasses(configClass, sourceClass);
 
+		//处理我们的@propertySource注解的
 		// Process any @PropertySource annotations
 		for (AnnotationAttributes propertySource : AnnotationConfigUtils.attributesForRepeatable(
 				sourceClass.getMetadata(), PropertySources.class,
@@ -277,6 +288,9 @@ class ConfigurationClassParser {
 			}
 		}
 
+		//解析我们的 @ComponentScan 注解
+
+		//从我们的配置类上解析处ComponentScans的对象集合属性
 		// Process any @ComponentScan annotations
 		Set<AnnotationAttributes> componentScans = AnnotationConfigUtils.attributesForRepeatable(
 				sourceClass.getMetadata(), ComponentScans.class, ComponentScan.class);
@@ -559,6 +573,7 @@ class ConfigurationClassParser {
 			configurationClasses.put(deferredImport.getConfigurationClass().getMetadata(),
 					deferredImport.getConfigurationClass());
 		}
+		//正在的调用延时的DeferredImportSelector的selectImport方法
 		for (DeferredImportSelectorGrouping grouping : groupings.values()) {
 			grouping.getImports().forEach(entry -> {
 				ConfigurationClass configurationClass = configurationClasses.get(entry.getMetadata());
