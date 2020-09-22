@@ -1,7 +1,9 @@
 package test.mytest;
 
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.context.annotation.ComponentScan;
 
+@ComponentScan("test.mytest")
 public class TestApplicationContext {
 
 
@@ -11,11 +13,18 @@ public class TestApplicationContext {
 //
 //
 //		RootBeanDefinition bd = new RootBeanDefinition(MyBeanDemo.class);
-//		context.registerBeanDefinition("demo",bd);
-		ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("/WEB-INF/applicationcontext.xml");
+////		context.registerBeanDefinition("demo",bd);
+//		ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("/WEB-INF/applicationcontext.xml");
+//
+//
+//		MyBeanDemo demo = (MyBeanDemo) context.getBean("demo");
+//		System.out.println(demo);
 
-		MyBeanDemo demo = (MyBeanDemo) context.getBean("demo");
+		AnnotationConfigApplicationContext applicationContext = new AnnotationConfigApplicationContext(TestApplicationContext.class);
+		MyBeanDemo demo = (MyBeanDemo) applicationContext.getBean("demo");
 		System.out.println(demo);
+
+
 	}
 
 }

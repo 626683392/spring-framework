@@ -1,7 +1,10 @@
 package test.mytest;
 
+import org.springframework.stereotype.Component;
+
 import java.util.Date;
 
+@Component
 public class MyBeanDemo {
     private String beanName = "bean";
 

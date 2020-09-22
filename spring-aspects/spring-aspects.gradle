@@ -28,7 +28,7 @@ compileJava {
 				classpath: configurations.ajc.asPath)
 
 		ant.iajc(source: sourceCompatibility, target: targetCompatibility,
-				maxmem: "1024m", fork: "true", Xlint: "ignore",
+				maxmem: "2048m", fork: "true", Xlint: "ignore",
 				destDir: outputDir.absolutePath,
 				aspectPath: configurations.aspects.asPath,
 				inpath: configurations.ajInpath.asPath,
