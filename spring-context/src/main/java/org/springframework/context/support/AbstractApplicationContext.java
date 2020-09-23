@@ -516,44 +516,41 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	@Override
 	public void refresh() throws BeansException, IllegalStateException {
 		synchronized (this.startupShutdownMonitor) {
-			// 准备刷新上下文环境
-			// Prepare this context for refreshing.
+			//1:准备刷新上下文环境
 			prepareRefresh();
 
-			// 初始化bean容器
-			// Tell the subclass to refresh the internal bean factory.
+			//2:获取告诉子类初始化Bean工厂
 			ConfigurableListableBeanFactory beanFactory = obtainFreshBeanFactory();
 
-			// 对BeanFactory功能扩充
-			// Prepare the bean factory for use in this context.
+			//3:对bean工厂进行填充属性
 			prepareBeanFactory(beanFactory);
 
 			try {
-				// Allows post-processing of the bean factory in context subclasses.
+				// 第四:留个子类去实现该接口
 				postProcessBeanFactory(beanFactory);
 
-				// Invoke factory processors registered as beans in the context.
+				// 调用我们的bean工厂的后置处理器.
 				invokeBeanFactoryPostProcessors(beanFactory);
 
-				// Register bean processors that intercept bean creation.
+				// 调用我们bean的后置处理器
 				registerBeanPostProcessors(beanFactory);
 
-				// Initialize message source for this context.
+				// 初始化国际化资源处理器.
 				initMessageSource();
 
-				// Initialize event multicaster for this context.
+				// 创建事件多播器
 				initApplicationEventMulticaster();
 
-				// Initialize other special beans in specific context subclasses.
+				// 这个方法同样也是留个子类实现的springboot也是从这个方法进行启动tomat的.
 				onRefresh();
 
-				// Check for listener beans and register them.
+				//把我们的事件监听器注册到多播器上
 				registerListeners();
 
-				// Instantiate all remaining (non-lazy-init) singletons.
+				//实例化我们剩余的单实例bean.
 				finishBeanFactoryInitialization(beanFactory);
 
-				// Last step: publish corresponding event.
+				// 最后容器刷新 发布刷新事件(Spring cloud也是从这里启动的)
 				finishRefresh();
 			}
 
@@ -882,6 +879,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 			beanFactory.addEmbeddedValueResolver(strVal -> getEnvironment().resolvePlaceholders(strVal));
 		}
 
+		// 处理关于aspectj
 		// Initialize LoadTimeWeaverAware beans early to allow for registering their transformers early.
 		String[] weaverAwareNames = beanFactory.getBeanNamesForType(LoadTimeWeaverAware.class, false, false);
 		for (String weaverAwareName : weaverAwareNames) {
@@ -891,9 +889,11 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 		// Stop using the temporary ClassLoader for type matching.
 		beanFactory.setTempClassLoader(null);
 
+		//冻结所有的 bean 定义 ， 说明注册的 bean 定义将不被修改或任何进一步的处理
 		// Allow for caching all bean definition metadata, not expecting further changes.
 		beanFactory.freezeConfiguration();
 
+		//实例化剩余的单实例bean
 		// Instantiate all remaining (non-lazy-init) singletons.
 		beanFactory.preInstantiateSingletons();
 	}
