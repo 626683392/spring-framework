@@ -1,4 +1,4 @@
-package com.meetkiki.circulardependencies_v1;
+package com.meetkiki.circulardependencies_v2;
 
 
 import org.springframework.beans.factory.annotation.Autowired;

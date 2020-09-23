@@ -1,4 +1,4 @@
-package com.meetkiki.circulardependencies_v1;
+package com.meetkiki.circulardependencies_v2;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,9 +36,17 @@ public class MainClass {
 	}
 
 	private static Object getBean(String beanName) throws IllegalAccessException {
+		Object singleton = getSingleton(beanName);
+		if (singleton != null) {
+			return singleton;
+		}
+
 		// 实例化
 		RootBeanDefinition beanDefinition = (RootBeanDefinition) BEAN_DEFINITION_MAP.get(beanName);
 		Object bean = BeanUtils.instantiateClass(beanDefinition.getBeanClass());
+
+		// 添加到一级缓存
+		singletonObjects.put(beanName, bean);
 		// 属性赋值
 		Field[] fields = bean.getClass().getDeclaredFields();
 		for (Field field : fields) {
@@ -55,9 +63,12 @@ public class MainClass {
 
 		// 初始化 init -method
 
-		// 添加到一级缓存
-		singletonObjects.put(beanName, bean);
-
 		return bean;
 	}
+
+
+	public static Object getSingleton(String beanName) {
+		return singletonObjects.getOrDefault(beanName, null);
+	}
+
 }
