@@ -12,7 +12,7 @@ public class InstanceC {
 	private InstanceC instanceC;
 
 	public InstanceC() {
-		System.out.println("InstanceA实例化");
+		System.out.println("InstanceC实例化");
 	}
 
 	public void say() {
