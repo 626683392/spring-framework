@@ -6,6 +6,7 @@ dependencies {
     compile(project(":spring-beans"))
     compile(project(":spring-core"))
     compile(project(":spring-aop"))
+    compile(project(":spring-aspects"))
     optional(project(":spring-context"))
     compile group: 'cglib', name: 'cglib', version: '3.2.10'
 }

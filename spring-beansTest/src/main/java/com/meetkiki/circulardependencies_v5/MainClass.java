@@ -25,7 +25,7 @@ public class MainClass {
 	// 二级缓存 主要是为了将成熟（完整的bean）和非成熟的bean 分离
 	private static final Map<String, Object> earlySingletonObjects = new HashMap<>();
 
-	// 三级缓存 完全为了解耦
+	// 三级缓存 完全为了解耦BeanPostProcessor的创建过程
 	private static final Map<String, ObjectFactory> singletonFactories = new HashMap<>();
 
 	// 标记正在创建的bean
