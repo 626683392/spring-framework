@@ -189,7 +189,7 @@ class ConfigurationClassParser {
 			}
 		}
 
-		//处理我们延时的DeferredImportSelectors w我们springboot就是通过这步进行记载spring.factories文件中的自定装配的对象
+		//处理我们延时的DeferredImportSelectors 我们springboot就是通过这步进行记载spring.factories文件中的自定装配的对象
 		processDeferredImportSelectors();
 	}
 
@@ -313,9 +313,11 @@ class ConfigurationClassParser {
 			}
 		}
 
+		// 处理 @Import annotations
 		// Process any @Import annotations
 		processImports(configClass, sourceClass, getImports(sourceClass), true);
 
+		// 处理 @ImportResource annotations
 		// Process any @ImportResource annotations
 		AnnotationAttributes importResource =
 				AnnotationConfigUtils.attributesFor(sourceClass.getMetadata(), ImportResource.class);
@@ -328,15 +330,18 @@ class ConfigurationClassParser {
 			}
 		}
 
+		// 处理 @Bean methods 获取到我们配置类中所有标注了@Bean的方法
 		// Process individual @Bean methods
 		Set<MethodMetadata> beanMethods = retrieveBeanMethodMetadata(sourceClass);
 		for (MethodMetadata methodMetadata : beanMethods) {
 			configClass.addBeanMethod(new BeanMethod(methodMetadata, configClass));
 		}
 
+		// 处理配置类接口的
 		// Process default methods on interfaces
 		processInterfaces(configClass, sourceClass);
 
+		// 处理配置类的父类的
 		// Process superclass, if any
 		if (sourceClass.getMetadata().hasSuperClass()) {
 			String superclass = sourceClass.getMetadata().getSuperClassName();
@@ -348,6 +353,7 @@ class ConfigurationClassParser {
 			}
 		}
 
+		// 没有父类解析完成
 		// No superclass -> processing is complete
 		return null;
 	}
@@ -616,36 +622,45 @@ class ConfigurationClassParser {
 		else {
 			this.importStack.push(configClass);
 			try {
+				//获取我们Import导入进来的所有组件
 				for (SourceClass candidate : importCandidates) {
+					//判断该组件是不是实现了ImportSelector的
 					if (candidate.isAssignable(ImportSelector.class)) {
 						// Candidate class is an ImportSelector -> delegate to it to determine imports
 						Class<?> candidateClass = candidate.loadClass();
+						//实例化我们的SelectImport组件
 						ImportSelector selector = BeanUtils.instantiateClass(candidateClass, ImportSelector.class);
+						//调用相关的aware方法
 						ParserStrategyUtils.invokeAwareMethods(
 								selector, this.environment, this.resourceLoader, this.registry);
+						//判断是不是延时的DeferredImportSelectors，是这个类型 不进行处理
 						if (this.deferredImportSelectors != null && selector instanceof DeferredImportSelector) {
 							this.deferredImportSelectors.add(
 									new DeferredImportSelectorHolder(configClass, (DeferredImportSelector) selector));
 						}
-						else {
+						else {//不是延时的
+							//调用selector的selectImports
 							String[] importClassNames = selector.selectImports(currentSourceClass.getMetadata());
+							//反之SelectImport 导入进来的又是Import进来的 所以递归解析
 							Collection<SourceClass> importSourceClasses = asSourceClasses(importClassNames);
 							processImports(configClass, currentSourceClass, importSourceClasses, false);
 						}
 					}
+					//判断我们导入的组件是不是ImportBeanDefinitionRegistrar
 					else if (candidate.isAssignable(ImportBeanDefinitionRegistrar.class)) {
 						// Candidate class is an ImportBeanDefinitionRegistrar ->
 						// delegate to it to register additional bean definitions
 						Class<?> candidateClass = candidate.loadClass();
+						//实例话我们的ImportBeanDefinitionRegistrar对象
 						ImportBeanDefinitionRegistrar registrar =
 								BeanUtils.instantiateClass(candidateClass, ImportBeanDefinitionRegistrar.class);
 						ParserStrategyUtils.invokeAwareMethods(
 								registrar, this.environment, this.resourceLoader, this.registry);
+						//保存我们的ImportBeanDefinitionRegistrar对象
 						configClass.addImportBeanDefinitionRegistrar(registrar, currentSourceClass.getMetadata());
 					}
-					else {
-						// Candidate class not an ImportSelector or ImportBeanDefinitionRegistrar ->
-						// process it as an @Configuration class
+					else {//就是一个普通的组件  但是防止我们普通的组件是一个配置类 所以还是直接走了processConfigurationClass()方法
+
 						this.importStack.registerImport(
 								currentSourceClass.getMetadata(), candidate.getMetadata().getClassName());
 						processConfigurationClass(candidate.asConfigClass(configClass));

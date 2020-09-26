@@ -168,7 +168,7 @@ final class PostProcessorRegistrationDelegate {
 		}
 
 		else { //若当前的beanFacotory没有实现了BeanDefinitionRegistry 直接调用
-			//直接电泳beanFacotoryPostProcessor接口的方法进行后置处理
+			//beanFacotoryPostProcessor接口的方法进行后置处理
 			invokeBeanFactoryPostProcessors(beanFactoryPostProcessors, beanFactory);
 		}
 

@@ -294,8 +294,7 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 			return Integer.compare(i1, i2);
 		});
 
-		// 创建我们通过@CompentScan导入进来的bean name的生成器
-		// 创建我们通过@Import导入进来的bean的名称
+		// 创建我们通过@CompentScan导入进来的bean name的生成器 // 创建我们通过@Import导入进来的bean的名称
 		SingletonBeanRegistry sbr = null;
 		if (registry instanceof SingletonBeanRegistry) {
 			sbr = (SingletonBeanRegistry) registry;
