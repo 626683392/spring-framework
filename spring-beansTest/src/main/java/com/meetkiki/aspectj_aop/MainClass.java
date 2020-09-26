@@ -6,7 +6,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 
 @EnableAspectJAutoProxy
-@ComponentScan(basePackages = {"com.meetkiki.aspectj_aop"})
+@ComponentScan
 public class MainClass {
 
 	public static void main(String[] args) {

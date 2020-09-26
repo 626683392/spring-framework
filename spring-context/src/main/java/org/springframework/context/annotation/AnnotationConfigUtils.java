@@ -189,6 +189,7 @@ public class AnnotationConfigUtils {
 
 		/**
 		 * 为我们容器注册处理JSR规范的注解处理器CommonAnnotationBeanPostProcessor
+		 *  注册@PostConstruct @PreDestroy @Resource及JSR-250支持注解解析类
 		 * org.springframework.context.annotation.internalCommonAnnotationProcessor
 		 */
 		// Check for JSR-250 support, and if present add the CommonAnnotationBeanPostProcessor.

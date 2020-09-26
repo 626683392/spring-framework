@@ -12,6 +12,7 @@ public class InstanceA {
 	}
 
 	public void say() {
+		//System.out.println(this);
 		say2();
 		System.out.println("hello world");
 	}
@@ -19,12 +20,9 @@ public class InstanceA {
 
 	@LockAction
 	public void say2() {
+		//System.out.println(this);
 		System.out.println("hello world");
 	}
 
 
-	@Override
-	public String toString() {
-		return "InstanceA";
-	}
 }

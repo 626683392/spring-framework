@@ -107,6 +107,7 @@ class ConfigurationClassEnhancer {
 			}
 			return configClass;
 		}
+		// 创建代理类
 		Class<?> enhancedClass = createClass(newEnhancer(configClass, classLoader));
 		if (logger.isDebugEnabled()) {
 			logger.debug(String.format("Successfully enhanced %s; enhanced class name is: %s",
@@ -317,6 +318,7 @@ class ConfigurationClassEnhancer {
 		public Object intercept(Object enhancedConfigInstance, Method beanMethod, Object[] beanMethodArgs,
 					MethodProxy cglibMethodProxy) throws Throwable {
 
+			// 通过反射从CGLIB增强的对象获取beanFactory对象
 			ConfigurableBeanFactory beanFactory = getBeanFactory(enhancedConfigInstance);
 			String beanName = BeanAnnotationHelper.determineBeanNameFor(beanMethod);
 
@@ -336,6 +338,7 @@ class ConfigurationClassEnhancer {
 			// proxy that intercepts calls to getObject() and returns any cached bean instance.
 			// This ensures that the semantics of calling a FactoryBean from within @Bean methods
 			// is the same as that of referring to a FactoryBean within XML. See SPR-6602.
+			// FactoryBean类型的Bean解析方式
 			if (factoryContainsBean(beanFactory, BeanFactory.FACTORY_BEAN_PREFIX + beanName) &&
 					factoryContainsBean(beanFactory, beanName)) {
 				Object factoryBean = beanFactory.getBean(BeanFactory.FACTORY_BEAN_PREFIX + beanName);
@@ -436,6 +439,7 @@ class ConfigurationClassEnhancer {
 
 		@Override
 		public boolean isMatch(Method candidateMethod) {
+			//方法不是Object中定义的，且不是setBeanFactory方法，且该方法包含@Bean注解就返回true
 			return (candidateMethod.getDeclaringClass() != Object.class &&
 					!BeanFactoryAwareMethodInterceptor.isSetBeanFactory(candidateMethod) &&
 					BeanAnnotationHelper.isBeanAnnotated(candidateMethod));

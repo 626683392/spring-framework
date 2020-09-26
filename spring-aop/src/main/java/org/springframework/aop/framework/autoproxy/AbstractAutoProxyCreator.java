@@ -249,12 +249,21 @@ public abstract class AbstractAutoProxyCreator extends ProxyProcessorSupport
 			if (this.advisedBeans.containsKey(cacheKey)) {
 				return null;
 			}
+
+			/**
+			 * 判断是不是基础的bean
+			 * 判断是不是应该跳过 (aop解析直接解析出我们的切面信息(并且把我们的切面信息进行保存)，而事务在这里是不会解析的)
+			 */
 			if (isInfrastructureClass(beanClass) || shouldSkip(beanClass, beanName)) {
 				this.advisedBeans.put(cacheKey, Boolean.FALSE);
 				return null;
 			}
 		}
 
+		/**
+		 * 这个地方一般是不会生成代理对象的,除非我们的容器中有TargetSourceCreator 并且我们的bean需要实现
+		 * TargetSource接口
+		 */
 		// Create proxy here if we have a custom TargetSource.
 		// Suppresses unnecessary default instantiation of the target bean:
 		// The TargetSource will handle target instances in a custom fashion.

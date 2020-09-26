@@ -744,6 +744,7 @@ class CglibAopProxy implements AopProxy, Serializable {
 		protected Object invokeJoinpoint() throws Throwable {
 			if (this.publicMethod) {
 				return this.methodProxy.invoke(this.target, this.arguments);
+//				return this.methodProxy.invokeSuper(this.proxy, this.arguments);
 			}
 			else {
 				return super.invokeJoinpoint();
