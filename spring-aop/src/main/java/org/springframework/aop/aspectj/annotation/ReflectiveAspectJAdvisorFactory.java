@@ -112,17 +112,21 @@ public class ReflectiveAspectJAdvisorFactory extends AbstractAspectJAdvisorFacto
 
 	@Override
 	public List<Advisor> getAdvisors(MetadataAwareAspectInstanceFactory aspectInstanceFactory) {
+		//获取我们的标记为Aspect的类
 		Class<?> aspectClass = aspectInstanceFactory.getAspectMetadata().getAspectClass();
+		//获取我们的切面类的名称
 		String aspectName = aspectInstanceFactory.getAspectMetadata().getAspectName();
+		//校验我们的切面类
 		validate(aspectClass);
 
-		// We need to wrap the MetadataAwareAspectInstanceFactory with a decorator
-		// so that it will only instantiate once.
+		//我们使用的是包装模式来包装我们的MetadataAwareAspectInstanceFactory 构建为MetadataAwareAspectInstanceFactory
 		MetadataAwareAspectInstanceFactory lazySingletonAspectInstanceFactory =
 				new LazySingletonAspectInstanceFactoryDecorator(aspectInstanceFactory);
 
 		List<Advisor> advisors = new ArrayList<>();
+		//获取到切面类中的所有方法，但是该方法不会解析标注了@PointCut注解的方法
 		for (Method method : getAdvisorMethods(aspectClass)) {
+			//挨个去解析我们切面中的方法
 			Advisor advisor = getAdvisor(method, lazySingletonAspectInstanceFactory, advisors.size(), aspectName);
 			if (advisor != null) {
 				advisors.add(advisor);
@@ -189,12 +193,14 @@ public class ReflectiveAspectJAdvisorFactory extends AbstractAspectJAdvisorFacto
 
 		validate(aspectInstanceFactory.getAspectMetadata().getAspectClass());
 
+		//切面的方法上构建 切点表达式
 		AspectJExpressionPointcut expressionPointcut = getPointcut(
 				candidateAdviceMethod, aspectInstanceFactory.getAspectMetadata().getAspectClass());
 		if (expressionPointcut == null) {
 			return null;
 		}
 
+		//实例化我们的切面通知对象
 		return new InstantiationModelAwarePointcutAdvisorImpl(expressionPointcut, candidateAdviceMethod,
 				this, aspectInstanceFactory, declarationOrderInAspect, aspectName);
 	}
