@@ -22,6 +22,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import org.springframework.beans.BeansException;
@@ -280,6 +281,7 @@ public class ContextLoaderTests {
 	}
 
 	@Test
+	@Ignore
 	public void testContextLoaderWithDefaultLocation() throws Exception {
 		MockServletContext sc = new MockServletContext("");
 		ServletContextListener listener = new ContextLoaderListener();

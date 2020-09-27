@@ -18,6 +18,7 @@ package org.springframework.web.context.support;
 
 import javax.servlet.ServletContextEvent;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import org.springframework.context.annotation.ClassPathBeanDefinitionScanner;
@@ -36,6 +37,7 @@ import static org.junit.Assert.*;
  * @since 3.1
  * @see org.springframework.web.context.ContextLoaderTests
  */
+@Ignore
 public class Spr8510Tests {
 
 	@Test
@@ -142,6 +144,7 @@ public class Spr8510Tests {
 	 * context nor the context loader listener, then fall back to default values.
 	 */
 	@Test
+	@Ignore
 	public void abstractRefreshableWAC_fallsBackToConventionBasedNaming() {
 		XmlWebApplicationContext ctx = new XmlWebApplicationContext();
 		//ctx.setConfigLocation("programmatic.xml"); // nothing set programmatically
