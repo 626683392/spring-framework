@@ -232,6 +232,7 @@ class ConfigurationClassParser {
 
 		ConfigurationClass existingClass = this.configurationClasses.get(configClass);
 		if (existingClass != null) {
+			// 传入进来的配置类是通过其他配置类的Import导入进来的
 			if (configClass.isImported()) {
 				if (existingClass.isImported()) {
 					// merge import

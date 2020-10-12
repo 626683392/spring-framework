@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
 public class CglibMethodInterceptTest {
 
 	public static void main(String[] args) {
-		// System.setProperty(DebuggingClassWriter.DEBUG_LOCATION_PROPERTY, "D:\\workspace\\spring-framework");
+//		System.setProperty(DebuggingClassWriter.DEBUG_LOCATION_PROPERTY, "./");
 
 		//创建一个Enhancer对象
 		Enhancer enchaner = new Enhancer();
