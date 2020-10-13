@@ -1,4 +1,4 @@
-package com.meetkiki.cglib;
+package com.meetkiki.cglibproxy;
 
 public class Student {
 

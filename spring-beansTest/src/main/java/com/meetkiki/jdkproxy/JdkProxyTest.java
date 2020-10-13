@@ -1,13 +1,13 @@
-package com.meetkiki.jdkProxy;
+package com.meetkiki.jdkproxy;
 
 import java.lang.reflect.Proxy;
 
-public class JdkProxyMain {
+public class JdkProxyTest {
 
 
 	public static void main(String[] args) {
 		// 生成代理文件
-		System.setProperty("sun.misc.ProxyGenerator.saveGeneratedFiles", "true");
+		// System.setProperty("sun.misc.ProxyGenerator.saveGeneratedFiles", "true");
 
 		IDao dao = (IDao) Proxy.newProxyInstance(
 				Dao.class.getClassLoader(),        // 代理类加载器

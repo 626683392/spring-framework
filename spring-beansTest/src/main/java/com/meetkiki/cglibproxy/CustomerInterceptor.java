@@ -1,4 +1,4 @@
-package com.meetkiki.cglib;
+package com.meetkiki.cglibproxy;
 
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
@@ -26,8 +26,8 @@ public class CustomerInterceptor implements MethodInterceptor {
 		System.err.println("原方法声明的类为 " + method.getDeclaringClass());
 		//System.err.println("我是 " + proxy.invokeSuper(obj, args));
 		System.err.println("代理方法调用结束了");
-		Object result = proxy.invokeSuper(obj, args);
-//		 Object result = proxy.invoke(target, args);
+//		Object result = proxy.invokeSuper(obj, args);
+		Object result = proxy.invoke(target, args);
 		return result;
 	}
 
