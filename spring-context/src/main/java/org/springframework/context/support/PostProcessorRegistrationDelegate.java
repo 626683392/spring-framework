@@ -63,7 +63,7 @@ final class PostProcessorRegistrationDelegate {
 			//保存BeanDefinitionRegistryPostProcessor类型的后置处理器
 			List<BeanDefinitionRegistryPostProcessor> registryProcessors = new ArrayList<>();
 
-			//循环我们传递进来的beanFactoryPostProcessors
+			// 循环我们 传递 进来的beanFactoryPostProcessors
 			for (BeanFactoryPostProcessor postProcessor : beanFactoryPostProcessors) {
 				//判断我们的后置处理器是不是BeanDefinitionRegistryPostProcessor
 				if (postProcessor instanceof BeanDefinitionRegistryPostProcessor) {

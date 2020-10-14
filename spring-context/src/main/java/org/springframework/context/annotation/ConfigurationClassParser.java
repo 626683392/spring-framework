@@ -272,10 +272,11 @@ class ConfigurationClassParser {
 	protected final SourceClass doProcessConfigurationClass(ConfigurationClass configClass, SourceClass sourceClass)
 			throws IOException {
 
+		// 最优先处理内部配置类
 		// Recursively process any member (nested) classes first
 		processMemberClasses(configClass, sourceClass);
 
-		//处理我们的@propertySource注解的
+		//处理我们的@propertySource注解的 和Bean没多大关系
 		// Process any @PropertySource annotations
 		for (AnnotationAttributes propertySource : AnnotationConfigUtils.attributesForRepeatable(
 				sourceClass.getMetadata(), PropertySources.class,
